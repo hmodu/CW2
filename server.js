@@ -22,7 +22,7 @@ app.use ((req,res, next) => {
 const MongoClient = require('mongodb').MongoClient;
 
 let db;
-MongoClient.connect('mongodb+srv://moha:modudu.@cluster0.hl3at.mongodb.net/test', (err, client) => {
+MongoClient.connect('mongodb+srv://moha:modudu.@cluster0.hl3at.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', (err, client) => {
     db = client.db('webstore')
 
 })
