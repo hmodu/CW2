@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Character set configuration -->
+<meta charset="UTF-8">
+<title>MDX CW 2 - Individual</title>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<!-- Viewport configuration, scaling options -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- Material Icon & Open Sans Font -->
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!--Import Materialize CSS Stylesheet-->
+<link type="text/css" rel="stylesheet" href="css/materialize.min.css" />
+<!-- Font Awesome icon -->
+<link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    rel="stylesheet">
+
+
+<body>
+    <div id="app">
+        <header>
+            <h2 v-text="sitename"></h2>
+            <br>
+            <h5>Sort by</h5>
+            <button class="btn waves-effect waves-light" v-on:click='sortProductsByPrice()'>Sort By Price</button>
+            <button class="btn waves-effect waves-light" v-on:click='sortProductsByTitle'>Sort By Title</button>
+            <button class="btn waves-effect waves-light" v-on:click='sortProductsByLocation'>Sort By Location</button>
+            <button class="btn waves-effect waves-light" v-on:click='sortProductsBySubject'>Sort By Subject</button>
+            <button class="btn waves-effect waves-light" v-on:click='sortProductsByAvailablity'>Sort By
+                Availablity</button>
+            <br>
+
+            <div class="row">
+                <h5>Order by</h5>
+                <label>
+                    <input name="group1" id="one" value="asec" type="radio" v-model="globalCheckAsecOrDesc" checked />
+                    <span>Ascending</span>
+                </label>
+
+                <label>
+                    <input name="group1" id="two" value="desc" type="radio" v-model="globalCheckAsecOrDesc" />
+                    <span>Descending</span>
+                </label>
+            </div>
+
+            <button class="btn waves-effect waves-light" v-on:click='showCheckout' v-if="enableShoppingCart">
+                {{cartItemCount}}
+                <span class="fas fa-cart-plus"></span> Checkout
+            </button>
+            <br>
+
+
+        </header>
+        <main>
+
+            <div class="row" v-if='showProduct'>
+
+
+                <div class="col s12 m3" v-for="product in products">
+
+                    <div class="card">
+                        <div class="card-image">
+                            <img v-bind:src="product.image">
+                            <span class="card-title">{{ product.title }}</span>
+
+                        </div>
+
+                        <div class="card-content">
+                            <p>Subject: {{product.subject}}</p>
+                            <p>Price: {{product.price}}$</p>
+                            <p>Location: {{product.location}}</p>
+                            <p> Available Spaces: {{product.availableInventory - cartCount(product.id) }}</p>
+                            <button class="btn waves-effect waves-light" v-on:click='addToCart(product)'
+                                v-if='canAddToCart(product)'>Add to cart</button>
+
+                            <button class="btn waves-effect waves-light" disabled="disabled" v-else>Add to cart</button>
+
+                            <span v-if='product.availableInventory === cartCount(product.id)'>All out!</span>
+                            <span v-else-if="product.availableInventory - cartCount(product.id) < 5">
+                                Only {{product.availableInventory - cartCount(product.id)}} left!
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div v-else>
+                <h2>Checkout Page</h2>
+                <!-- Start Order Form Code  -->
+                <form @submit="postOrder">
+                    <p>
+                        <strong for="Name">Name:</strong>
+                        <input type="text" v-model.trim='order.firstName' placeholder="Enter Your Name Here"
+                            id="firstName" name="firstName" required>
+                    </p>
+
+                    <p>
+                        <strong for="phone">Phone:</strong>
+                        <input type="tel" v-model.number='order.phone' 
+                            placeholder="Enter Your Phone Number" id="phone" name="phone" required>
+                    </p>
+                    <button class="btn waves-effect waves-light" v-on:click='showCheckout' name="action">Back
+                        <i class="material-icons left"> arrow_back</i>
+                    </button>
+
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Place Order
+                        <i class="material-icons right">send</i>
+                    </button>
+
+                </form>
+                <!-- End Order Form Code  -->
+
+                <!-- Start Shopping Cart Inside Checkout Page   -->
+                <br>
+                <h1 style="text-align: center;">Shopping Cart Page</h1>
+                <br>
+                <div class="row">
+                    <div class="col s12 m4" v-for="product in MyCartProducts">
+
+                        <div class="card">
+
+                            <div class="card-image">
+                                <img v-bind:src="product.image">
+                                <span class="card-title">{{ product.title }}</span>
+                            </div>
+
+                            <div class="card-content">
+                                <p>Subject: {{product.subject}}</p>
+                                <p>Price: {{product.price}}$</p>
+                                <p>Location: {{product.location}}</p>
+                                <button class="btn waves-effect waves-light"
+                                    v-on:click='deleteFromCart(product,MyCartProducts)'>Remove Item
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- End Shopping Cart Inside Checkout Page   -->
+
+
+        </main>
+    </div>
+
+    <!-- Loading Vue Js  -->
+    <script src="https://unpkg.com/vue"></script>
+    <!-- Loading My Javascript Code  -->
+    <script src="vue.js"> </script>
+
+</body>
+
+</html>
