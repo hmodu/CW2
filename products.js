@@ -1,7 +1,6 @@
 let lessons = [
     {
       "id": 1001,
-      "image": "",
       "image": "file.jpg",
       "subject": "Physics",
       "price": 50,
